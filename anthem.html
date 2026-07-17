@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nigeria National Anthem - Stanza 1</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:linear-gradient(135deg,#0a3d1b,#157347);
+    font-family:Arial,Helvetica,sans-serif;
+    color:#fff;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+}
+
+.container{
+    width:90%;
+    max-width:1400px;
+    text-align:center;
+}
+
+h2{
+    color:#FFD700;
+    font-size:70px;
+    margin-bottom:60px;
+    letter-spacing:2px;
+}
+
+.line{
+    font-size:60px;
+    font-weight:bold;
+    margin:25px 0;
+    opacity:.25;
+    transition:all .4s ease;
+}
+
+.active{
+    color:#FFD700;
+    opacity:1;
+    transform:scale(1.08);
+    text-shadow:
+        0 0 10px gold,
+        0 0 20px gold,
+        0 0 40px gold;
+}
+
+.past{
+    opacity:.55;
+}
+
+#startBtn{
+
+    position:fixed;
+    bottom:40px;
+    left:50%;
+    transform:translateX(-50%);
+    padding:18px 45px;
+    font-size:26px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    background:#FFD700;
+    color:#000;
+    font-weight:bold;
+
+}
+
+audio{
+    display:none;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<h2>🇳🇬 NIGERIA, WE HAIL THEE 🇳🇬</h2>
+
+<div class="line">Nigeria, we hail thee,</div>
+
+<div class="line">Our own dear native land,</div>
+
+<div class="line">Though tribe and tongue may differ,</div>
+
+<div class="line">In brotherhood, we stand,</div>
+
+<div class="line">Nigerians all, and proud to serve</div>
+
+<div class="line">Our sovereign Motherland.</div>
+
+</div>
+
+<button id="startBtn">
+▶ Start Anthem
+</button>
+
+<audio id="anthem" preload="auto">
+    <source src="hail.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+const timings = [
+    0,
+    6,
+    12,
+    18,
+    24,
+    29
+];
+const audio=document.getElementById("anthem");
+const lines=document.querySelectorAll(".line");
+const startBtn=document.getElementById("startBtn");
+
+function updateLyrics(){
+
+    let current=-1;
+
+    timings.forEach((time,index)=>{
+
+        if(audio.currentTime>=time){
+
+            current=index;
+
+        }
+
+    });
+
+    lines.forEach((line,index)=>{
+
+        line.classList.remove("active");
+        line.classList.remove("past");
+
+        if(index<current){
+
+            line.classList.add("past");
+
+        }
+
+        if(index===current){
+
+            line.classList.add("active");
+
+        }
+
+    });
+
+}
+
+audio.addEventListener("timeupdate",updateLyrics);
+
+startBtn.addEventListener("click",()=>{
+
+    audio.currentTime=0;
+
+    audio.play();
+
+    startBtn.style.display="none";
+
+    document.documentElement.requestFullscreen().catch(()=>{});
+
+});
+
+audio.addEventListener("ended",()=>{
+
+    startBtn.style.display="block";
+
+    lines.forEach(line=>{
+
+        line.classList.remove("active");
+        line.classList.remove("past");
+
+    });
+
+});
+
+document.addEventListener("keydown",(e)=>{
+
+    if(e.code==="Space"){
+
+        e.preventDefault();
+
+        if(audio.paused){
+
+            startBtn.click();
+
+        }
+
+    }
+
+    if(e.key==="f" || e.key==="F"){
+
+        document.documentElement.requestFullscreen().catch(()=>{});
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
